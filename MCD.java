@@ -73,8 +73,7 @@ public class MCD {
 		int operation = 1;
 		for(int n : listaFattori.get(0).keySet()) {
 			if(getMinValue(listaFattori,n) != 0)
-				operation *= n*getMinValue(listaFattori,n);
-		}
+				operation *= Math.pow(n,getMinValue(listaFattori,n));
 		
 		System.out.println("MCD = " + operation);
 		
