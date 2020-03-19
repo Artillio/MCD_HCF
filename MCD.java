@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MCD {
 
-	public static List<Integer> primeFactors(int numbers) {
+	public List<Integer> primeFactors(int numbers) {
         int n = numbers;
         List<Integer> factors = new ArrayList<Integer>();
         for (int i = 2; i <= n / i; i++) {
@@ -20,7 +20,7 @@ public class MCD {
         return factors;
     }
 	
-	public static int countX(List<Integer> tmp, int x) {
+	public int countX(List<Integer> tmp, int x) {
 		
 		int count = 0;
 		for(int i : tmp ) {
@@ -32,8 +32,7 @@ public class MCD {
 		
 	}
 	
-	
-	public static int getMinValue(List<HashMap<Integer, Integer>> listaFattori, int cerca) {
+	public int getMinValue(List<HashMap<Integer, Integer>> listaFattori, int cerca) {
 		
 		int valore = Integer.MAX_VALUE;
 		for(int i = 0; i < listaFattori.size(); i++) {
@@ -50,13 +49,22 @@ public class MCD {
 		
 	}
 	
-	public static void main(String[] args) {
+	public int getMaxValue(List<HashMap<Integer, Integer>> listaFattori, int cerca) {
 		
-		int[] a = {456,96, 16, 480};
+		int valore = 0;
+		for(int i = 0; i < listaFattori.size(); i++) {
+			if(listaFattori.get(i).containsKey(cerca)) {
+				if(listaFattori.get(i).get(cerca) > valore)
+					valore = listaFattori.get(i).get(cerca);
+			}
+		}
+		
+		return valore;
+		
+	}
+	
+	public int get_MCM(int[] a) {
 		Arrays.sort(a);
-		for(int i : a)
-			System.out.print(i + " , ");
-		System.out.println();
 		
 		List<HashMap<Integer, Integer>> listaFattori = new ArrayList<HashMap<Integer, Integer>>();	
 		for(int i = 0; i < a.length; i++) {
@@ -68,15 +76,45 @@ public class MCD {
 			listaFattori.add(val_fatt);
 		}
 		
-		System.out.println(listaFattori);
+		int operation = 1;
+		ArrayList<Integer> cercati = new ArrayList<Integer>();
+		for(int i = 0; i < listaFattori.size(); i++) {
+			for(int n : listaFattori.get(i).keySet()) {
+				if(!cercati.contains(n)) {
+					if(getMaxValue(listaFattori,n) != 0)
+						operation *= Math.pow(n,getMaxValue(listaFattori,n));
+					cercati.add(n);
+				}
+
+			}
+			
+		}
+		
+		return operation;
+	}
+	
+	public int get_MCD(int[] a) {
+		
+		Arrays.sort(a);
+		
+		List<HashMap<Integer, Integer>> listaFattori = new ArrayList<HashMap<Integer, Integer>>();	
+		for(int i = 0; i < a.length; i++) {
+			List<Integer> fattori = primeFactors(a[i]);
+			HashMap<Integer, Integer> val_fatt = new HashMap<Integer, Integer>();
+			for(int x : fattori) {
+				val_fatt.put(x, countX(fattori, x));
+			}
+			listaFattori.add(val_fatt);
+		}
 		
 		int operation = 1;
 		for(int n : listaFattori.get(0).keySet()) {
 			if(getMinValue(listaFattori,n) != 0)
 				operation *= Math.pow(n,getMinValue(listaFattori,n));
+		}
 		
-		System.out.println("MCD = " + operation);
-		
+		return operation;
 	}
+	
 	
 }
